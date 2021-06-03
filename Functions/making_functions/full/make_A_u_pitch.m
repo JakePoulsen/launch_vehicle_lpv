@@ -1,0 +1,13 @@
+str_start = 'function A_u=A_rigid_pitch(x_CG,x_CP,x_PVP,J_y,S_ref,m,mach,rho,v_x,g,T_TVC,Psi_z1_PVP,Psi_z2_PVP,Psi_theta1_PVP,Psi_theta2_PVP,zeta,omega_n1,omega_n2,idx,cd_coeff,cl_coeff,aoa)\n';
+str_end = 'end';
+%str1=strrep(str_A_u,'conj(x_CG)','x_CG');
+%str2=strrep(str_A_u,'conj(x_CP)','x_CP');
+%str3=strrep(str_A_u,'conj(v_x)','v_x');
+%str4=strrep(str_A_u,'[','A_u = [');
+str = replace(str_A_u, {'[', 'conj(x_CP)', 'conj(x_CG)','conj(v_x)','subs(diff(c_l_v(v_x, 0, v_z, mach), v_z), v_z, 0)','c_d_v(v_x, 0, 0, mach)','c_d'}, {'A_u = [', 'x_CP', 'x_CG','v_x','polyval(polyder(cl_coeff{idx}), aoa)','polyval(cd_coeff{idx}, aoa)','polyval(cd_coeff{idx}, aoa)'});
+open = fullfile(find_uncertain,file_A_u);
+fid = fopen(open,'w+');
+fprintf(fid,str_start);
+fprintf(fid,str);
+fprintf(fid,str_end);
+fclose(fid);
